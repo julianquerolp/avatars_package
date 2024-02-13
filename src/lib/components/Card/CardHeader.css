@@ -1,0 +1,10 @@
+.card-header {
+    border-bottom: 1px solid #000;
+    display: flex;
+    align-items: center;
+}
+
+.card-header h3 {
+    flex: 1;
+    color: #000;
+}

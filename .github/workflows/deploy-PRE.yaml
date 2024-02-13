@@ -1,0 +1,23 @@
+name: Deploy-pre
+
+on:
+  push:
+    branches:
+      - preo
+
+jobs:
+  create-tag-RC:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # - run: git config --global user.name "Julian querol"
+      # - run: git config --global user.email "julian.querol@abaigroup.com"
+      # - run: npm run rc
+      # - run: npm run push:pre
+      - name: Obtener version actual
+        id: version
+        run: echo ::set-output name=VERSION::$(jq -r .version package.json)
+      - name: Crear etiqueta de RC
+        run: |
+          git tag v${{ steps.version.outputs.VERSION }}-RC
+          git push --tags

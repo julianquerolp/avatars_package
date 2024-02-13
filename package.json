@@ -1,0 +1,41 @@
+{
+  "name": "@julianquerolp/avatars_package",
+  "version": "0.0.1",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "@julianquerolp:registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "url": "https://github.com/julianquerolp/avatars_package.git"
+  },
+  "description": "This is an example react avatars_package",
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "scripts": {
+    "build:css": "copyup 'src/lib/**/*.css' dist/css",
+    "build": "vite build && npm run build:css",
+    "release": "npm version patch -m 'Nueva version  v%s'",
+    "rc": "npm version prerelease -m 'Nueva version  v%s' --preid=rc",
+    "push:pre": "git push origin pre --follow-tags",
+    "push:pro": "git push origin main --follow-tags",
+    "update:release": "npm run release && git push",
+    "update:rc": "npm run rc && npm run push"
+  },
+  "dependencies": {
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "copyfiles": "^2.4.1",
+    "vite": "^5.0.12"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
+    }
+  }
+}

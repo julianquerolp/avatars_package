@@ -1,0 +1,45 @@
+name: Increment Version
+
+on:
+  push:
+    branches:
+      - devo
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git config --global user.name "Julian querol"
+      - run: git config --global user.email "julian.querol@abaigroup.com"
+      - run: npm run update:release
+      - run: git pull origin dev
+      - uses: BobAnkh/auto-generate-changelog@v1.2.5
+        with:
+          ACCESS_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PATH: "PENDEJO.md"
+          COMMIT_MESSAGE: "docs(PENDEJO): update release notes"
+          TYPE: "feat:Feature,fix:Bug Fixes,docs:Documentation,refactor:Refactor,perf:Performance Improvements"
+      # - name: Obtener version actual
+      #   id: version
+      #   run: echo ::set-output name=VERSION::$(jq -r .version package.json)
+      # - name: Obtener log de commits
+      #   id: git_log
+      #   run: echo ::set-output name=LOG::$(git log --pretty=format:"%s (%ad)" --date=short $(git describe --tags --abbrev=0)..HEAD)
+      # - name: Obtener fecha y hora
+      #   id: fecha_hora
+      #   run: echo ::set-output name=DATE_TIME::$(date +'%Y-%m-%d %H:%M:%S')
+      # - name: Actualizar Changelog
+      #   run: |
+      #     echo "## ${DATE_TIME}" >> CHANGELOG.md
+      #     echo "${{ steps.git_log.outputs.LOG }}" | while read -r line; do
+      #     echo "* $line" >> CHANGELOG.md
+      #     done
+      #     echo "" >> CHANGELOG.md
+      # - name: Commit y push cambios en changelog
+      #   run: |
+      #     git config --local user.email "julian.querol@abaigroup.com"
+      #     git config --local user.name "Julian querol"
+      #     git add CHANGELOG.md
+      #     git commit -m "Actualizado el changelog [skip ci]"
+      #     git push

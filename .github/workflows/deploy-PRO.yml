@@ -1,0 +1,33 @@
+name: Deploy-pro
+
+on:
+  push:
+    branches:
+      - maino
+
+jobs:
+  create-tag-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git config --global user.name "Julian querol"
+      - run: git config --global user.email "julian.querol@abaigroup.com"
+      # - run: npm run release
+      # - run: npm run push:pro
+      - name: Obtener version actual
+        id: version
+        run: echo ::set-output name=VERSION::$(jq -r .version package.json)
+      - name: Crear TAG Release
+        run: |
+          git tag v${{ steps.version.outputs.VERSION }}
+          git push --tags
+      - name: Crear release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version.outputs.VERSION }}
+          release_name: v${{ steps.version.outputs.VERSION }}
+          draft: false
+          prerelease: false
